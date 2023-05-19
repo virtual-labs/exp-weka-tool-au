@@ -1,13 +1,495 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
-</head>
-<body>
-		<!-- Your code goes here-->
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+<head>
+  <link rel="stylesheet" type="text/css" href="Style.css">
+  <title>ARFF File Upload and Preprocess</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+  <div class='at-container'>
+    <img src="images\logo.png" width="300" height="100" style="margin-left:2%;">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div id='header'>Basic Machine Learning using the WEKA tool</div><br><br><br>
+  </div>
+  <div enctype="multipart/form-data" style="background-color: #d0d2d6;width: 1500px;margin-left: 200px;">
+    <br><br>
+    <div class="file-upload">
+      <label for="fileinput" style="font-size:18px;">Choose an ARFF file to upload</label>
+      <input type="file" id="fileinput" hidden>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="upbutton"
+        onclick="upload()">Upload</button><br><br><br>
+    </div>
+
+
+    <div id="current">
+      <button type="button" class="collapsible"></button>
+      <label for="currentRel"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Relation</b></label>
+      <div class="contents" style="text-align: left;"><br>
+        <table style="display: inline-block;">
+          <tr>
+            <td><textarea id="fileContent" cols="50" rows="10" disabled></textarea></td>
+          </tr><br>
+        </table>
+        <table style="display: inline-block; margin-left: 50px; vertical-align: 50px; ">
+          <tr>
+            <td><label for="Relation"><b>Relation:</b></label></td>
+            <td><label id="relation" name="relation" style="font-weight: bold;"></label></td>
+          </tr>
+          <tr>
+            <td><label for="Sumofweights"><b>Sum of weights:</b></label></td>
+            <td><label id="sumofweights" name="sumofweights" style="font-weight: bold;"></label></td>
+          </tr>
+          <tr>
+            <td><label for="Instances"><b>Instances:</b></label></td>
+            <td><label id="instance" name="instance" style="font-weight: bold;"></label></td>
+          </tr>
+          <tr>
+            <td><label for="attribute"><b>Attribute:</b></label></td>
+            <td><label id="attribute" name="attribute" style="font-weight: bold;"></label></td>
+          </tr>
+        </table>
+
+        <br><br>
+      </div>
+    </div>
+
+
+    <div id="attrribute">
+      <button type="button" class="collapsible">Select an Attribute</button>
+      <div class="content">
+
+        <ol id="myArrayElement"></ol>
+      </div>
+    </div>
+
+
+    <div id="selected">
+      <button type="button" class="collapsible">Selected Attributes</button>
+      <div class="content" style="text-align: left;"><br>
+        </table>
+        <table style="display: inline-block; margin-left: 50px; vertical-align: top; ">
+          <tr>
+            <td><label for="Name"><b>Name:</b></label></td>
+            <td><label id="name" name="name" style="font-weight: bold;"></label></td>
+          </tr>
+          <tr>
+            <td><label for="Type"><b>Type:</b></label></td>
+            <td><label id="atype" name="atype" style="font-weight: bold;"></label></td>
+          </tr>
+          <tr>
+            <td><label for="Distinct"><b>Distinct:</b></label></td>
+            <td><label id="distinct" name="distinct" style="font-weight: bold;"></label></td>
+          </tr>
+
+        </table>
+        <div id="output-container" style="font-weight: bold; text-align: left;margin-left: 50px;"></div>
+
+      </div>
+    </div>
+
+
+    <div id="reset">
+      <input type="reset" id="resetbutton" value="Reset" onclick="reset()" /><br><br>
+    </div>
+  </div>
+
+
+  <script>
+
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+    document.getElementById('current').style.visibility = 'hidden';
+    document.getElementById('attrribute').style.visibility = 'hidden';
+    document.getElementById('selected').style.visibility = 'hidden';
+    document.getElementById('resetbutton').style.visibility = 'hidden';
+
+    var data = null;
+    function upload() {
+
+      var fileInput = document.getElementById('fileinput');
+      var file = fileInput.files[0];
+      if (!file.name.endsWith('.arff')) {
+        alert('Please upload an ARFF file');
+        return;
+      }
+      var reader = new FileReader();
+
+      // Function to be executed when the FileReader loads the file
+      reader.onload = function (event) {
+        const arffData = event.target.result;
+        const datas = parseARFF(arffData);
+
+        const distinctValues = getDistinctValues(datas);
+        data = reader.result;
+        document.getElementById('fileContent').value = data;
+        const lines = data.split('\n');
+
+
+
+        let dataStartIndex = -1;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith("@data") || line.startsWith("@DATA")) {
+            dataStartIndex = i + 1;
+            break;
+          }
+        }
+
+        if (dataStartIndex === -1) {
+          console.log("uploading");
+          return;
+        }
+
+        const dataLines = [];
+        for (let i = dataStartIndex; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line === "" || line.startsWith("%")) {
+            continue;
+          }
+          dataLines.push(line);
+        }
+
+        const numInstances = dataLines.length;
+        document.getElementById('instance').textContent = numInstances;
+
+        var relationName = data.match(/@relation\s+'?([^'\n]+)'?\s*\n/i);
+        relationName = relationName[1];
+        document.getElementById('relation').textContent = relationName;
+
+        const attributeLines = data.match(/^@attribute\s.*|^@ATTRIBUTE\s.*/gm);
+        const attributeNames = attributeLines.map(line => line.split(/[\s{}]+/)[1].replace(/'/g, ''));
+
+        const numAttributes = attributeNames.length;
+        document.getElementById('attribute').textContent = numAttributes;
+        document.getElementById("sumofweights").textContent = numInstances;
+
+        let attributeType = {};
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+
+          if (line.startsWith('%') || line.length === 0) {
+            continue;
+          }
+
+          if (line.startsWith('@attribute')) {
+            const attributeInfo = line.split(/\s+/);
+            const attributeName = attributeInfo[1];
+            const attributeTypeString = attributeInfo[2];
+
+            let type;
+            if (attributeTypeString.startsWith('{')) {
+              type = 'nominal';
+            } else if (attributeTypeString === 'numeric' || attributeTypeString === 'real' || attributeTypeString === 'REAL') {
+              type = 'numeric';
+            } else {
+              type = 'string';
+            }
+
+            attributeType[attributeName] = type;
+          }
+        }
+
+        // Listing checkboxes with attribute names
+        const list = document.getElementById('myArrayElement');
+        list.innerHTML = attributeNames.map(i => `<li><input type="checkbox" data-type="${attributeType[i]}">${i}</li>`).join('');
+        // Select all checkboxes in a given list
+        const checkboxes = list.querySelectorAll('input[type="checkbox"]');
+        // Select the third collapsible element on the page
+        const collapsible3 = document.getElementsByClassName("collapsible")[2];
+        // Add a change event listener to each checkbox
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+              // Uncheck all other checkboxes
+              checkboxes.forEach(otherCheckbox => {
+                if (otherCheckbox !== checkbox) {
+                  otherCheckbox.checked = false;
+                }
+              });
+
+              // Extract the attribute name and type from the checkbox and find its index
+              const attributeName = checkbox.parentNode.innerText.trim();
+              const attributeType = checkbox.getAttribute('data-type');
+              const attributeIndex = attributeNames.indexOf(attributeName);
+
+              // Extract the attribute data from the data lines and filter by the selected attribute
+              const attributeData = dataLines.map(line => {
+                const values = line.split(',');
+                const value = values[attributeIndex].trim();
+                return attributeType === 'numeric' ? parseFloat(value) : value;
+              });
+
+              // Display the distinct values and their counts in the output container
+              const outputContainer = document.getElementById('output-container');
+              outputContainer.innerHTML = '';
+              if (attributeType === 'numeric') {
+                const minValue = Math.min(...attributeData);
+                const maxValue = Math.max(...attributeData);
+                const meanValue = attributeData.reduce((a, b) => a + b, 0) / attributeData.length;
+                const stdDeviation = Math.sqrt(attributeData.reduce((a, b) => a + (b - meanValue) ** 2, 0) / attributeData.length);
+
+                const minElement = document.createElement('div');
+                minElement.innerText = `Minimum: ${minValue}`;
+                outputContainer.appendChild(minElement);
+
+                const maxElement = document.createElement('div');
+                maxElement.innerText = `Maximum: ${maxValue}`;
+                outputContainer.appendChild(maxElement);
+
+                const meanElement = document.createElement('div');
+                meanElement.innerText = `Mean: ${meanValue.toFixed(2)}`;
+                outputContainer.appendChild(meanElement);
+
+                const stdDevElement = document.createElement('div');
+                stdDevElement.innerText = `Standard Deviation: ${stdDeviation.toFixed(2)}`;
+                outputContainer.appendChild(stdDevElement);
+
+                // Get the canvas element
+                const canvas = document.getElementById('bar-chart');
+                if (window.myChart) {
+                  window.myChart.destroy();
+                }
+
+                // Create the chart data
+                const chartData = {
+                  labels: ['Minimum', 'Maximum', 'Mean', 'Standard Deviation'],
+                  datasets: [{
+                    label: 'Values',
+                    data: [minValue, maxValue, meanValue, stdDeviation],
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.8)',
+                      'rgba(54, 162, 235, 0.8)',
+                      'rgba(255, 206, 86, 0.8)',
+                      'rgba(75, 192, 192, 0.8)',
+                      'rgba(153, 102, 255, 0.8)',
+                      'rgba(255, 159, 64, 0.8)'
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                };
+
+                const chartConfig = {
+                  type: 'bar',
+                  data: chartData,
+                  options: {
+                    scales: {
+                      yAxes: [{
+                        ticks: {
+                          beginAtZero: true
+                        }
+                      }]
+                    }
+                  }
+                };
+
+                const chartCanvas = document.createElement('canvas');
+                chartCanvas.id = 'numeric-chart';
+                outputContainer.appendChild(chartCanvas);
+                 
+                window.myChart = new Chart(chartCanvas, chartConfig);
+
+              } else if (attributeType === 'nominal') {
+                // Destroy old chart if it exists
+                if (window.myChart) {
+                  window.myChart.destroy();
+                }
+
+                // Count the distinct values in the attribute data
+                const valueCounts = {};
+                attributeData.forEach(value => {
+                  valueCounts[value] = (valueCounts[value] || 0) + 1;
+                });
+      
+                // Display the value counts in the output container
+                Object.keys(valueCounts).forEach(value => {
+                  const count = valueCounts[value];
+                  const valueElement = document.createElement('div');
+                  valueElement.innerText = `${value}: ${count}`;
+                  outputContainer.appendChild(valueElement);    
+                });
+
+                // Define new colors
+                const colors = [
+                  'rgba(255, 99, 132, 0.8)',
+                  'rgba(54, 162, 235, 0.8)',
+                  'rgba(255, 206, 86, 0.8)',
+                  'rgba(75, 192, 192, 0.8)',
+                  'rgba(153, 102, 255, 0.8)',
+                  'rgba(255, 159, 64, 0.8)'
+                ];
+
+                // Update chart data with new colors
+                const chartData = {
+                  labels: Object.keys(valueCounts),
+                  datasets: [{
+                    label: 'Values',
+                    data: Object.values(valueCounts),
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1
+                  }]
+                };
+
+                // Use updated chart data to create the chart
+                const chartConfig = {
+                  type: 'bar',
+                  data: chartData,
+                  options: {
+                    scales: {
+                      yAxes: [{
+                        ticks: {
+                          beginAtZero: true
+                        }
+                      }]
+                    },
+                    title: {
+                      display: true,
+                      text: 'Value Counts by Category'
+                    },
+                    legend: {
+                      display: false
+                    }
+                  }
+                };
+                const chartCanvas = document.createElement('canvas');
+                chartCanvas.id = 'bar-chart-2';
+                outputContainer.appendChild(chartCanvas);
+                const myChart = new Chart(chartCanvas, chartConfig);
+
+              }
+              // Extract the distinct values for the selected attribute and update the UI elements
+              const distinctValuesForAttribute = distinctValues[attributeIndex];
+
+              const distinctLength = distinctValuesForAttribute.length;
+              document.getElementById('distinct').textContent = distinctLength;
+              document.getElementById('name').textContent = attributeName;
+              document.getElementById('atype').textContent = attributeType;
+
+              // Show the collapsible element
+              collapsible3.classList.add("active");
+              collapsible3.nextElementSibling.style.display = "block";
+            } else {
+              // Clear the UI elements and hide the collapsible element
+              document.getElementById('name').textContent = '';
+              document.getElementById('atype').textContent = '';
+              document.getElementById('distinct').textContent = '';
+              document.getElementById('output-container').textContent = '';
+              collapsible3.nextElementSibling.style.display = "none";
+            }
+          });
+        });
+        function parseARFF(arffData) {
+          const lines = arffData.split('\n');
+          let dataStart = 0;
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('@data')) {
+              dataStart = i + 1;
+              break;
+            }
+          }
+          const data = [];
+          for (let i = dataStart; i < lines.length; i++) {
+            if (!lines[i].startsWith('%') && lines[i].trim() !== '') {
+              const values = lines[i].split(',');
+              data.push(values);
+            }
+          }
+          return data;
+
+        }
+        //find distinct value
+        function getDistinctValues(data) {
+          const distinctValues = {};
+          for (let i = 0; i < data[0].length; i++) {
+            const attributeValues = new Set();
+            for (let j = 0; j < data.length; j++) {
+              attributeValues.add(data[j][i]);
+            }
+            distinctValues[i] = [...attributeValues];
+
+
+          }
+          return distinctValues;
+
+        }
+      };
+      document.getElementById('current').style.visibility = 'visible';
+      document.getElementById('attrribute').style.visibility = 'visible';
+      document.getElementById('selected').style.visibility = 'visible';
+      document.getElementById('resetbutton').style.visibility = 'visible';
+
+      reader.readAsText(file);
+
+    }
+    function reset() {
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].classList.remove("active");
+        coll[i].nextElementSibling.style.display = "none";
+      }
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+
+      document.getElementById("fileContent").value = "";
+      document.getElementById("relation").innerHTML = "";
+      document.getElementById("sumofweights").innerHTML = "";
+      document.getElementById("instance").innerHTML = "";
+      document.getElementById("attribute").innerHTML = "";
+      document.getElementById("myArrayElement").innerHTML = "";
+      document.getElementById("name").innerHTML = "";
+      document.getElementById("atype").innerHTML = "";
+      document.getElementById("distinct").innerHTML = "";
+      document.getElementById("output-container").innerHTML = "";
+      document.getElementById('current').style.visibility = 'hidden';
+      document.getElementById('attrribute').style.visibility = 'hidden';
+      document.getElementById('selected').style.visibility = 'hidden';
+      document.getElementById('resetbutton').style.visibility = 'hidden';
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+    }
+  </script>
 </body>
+
 </html>
