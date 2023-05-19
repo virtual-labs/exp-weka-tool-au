@@ -1,11 +1,10 @@
 ## Introduction
-&nbsp;
-### Artificial Intelligence#
+
+### Artificial Intelligence
 
 Artificial intelligence in modern era have potential to make a revolutionary changes in every aspects of human life. The science of making intelligent computer by robust computing programs were begin in early 1950's from the concept “ Can machines think” by the  renowned scientist Alan Turing, who is known as the founding father of artificial intelligence and modern cognitive science. Artificial intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and perform tasks that typically require human-like intelligence. Booming of artificial intelligence in the field of education, healthcare, industries, finance, transportation lead to the development of most innovative and promising technologies and tools that reduces humans physical and cognitive challenges.AI can be achieved through various methods, including machine learning, natural language processing, computer vision, and robotics. Deep learning and Machine learning were the two sub-fields of artificial intelligence combining with computer science and robust datasets.
 
 &nbsp;
-
 #### Application of Artificial Intelligence:
 
 •	Healthcare: AI is being used in medical imaging to detect diseases and injuries such as cancer, heart disease, and brain disorders.
@@ -24,7 +23,6 @@ Artificial intelligence in modern era have potential to make a revolutionary cha
 
 &nbsp;
 ### Deep Learning
-
 
 Deep learning is a subfield of machine learning which essentially involves an artificial neural networks with three or more layers. The neural networks were designed to stimulate human brain behaviours to learn large amounts of data. Deep learning drives many artificial intelligence (AI) applications and services that improve automation, performing analytical and physical tasks without human intervention. A wide range of applications of including image and speech recognition, natural language processing, and autonomous vehicles.
 
@@ -49,9 +47,8 @@ Machine learning is a subset of AI that involves the use of algorithms and stati
 ### Machine learning methods
 
 Machine learning models are broadly divided into four types – supervised learning, unsupervised learning, semi-supervised learning, and reinforcement learning.
-
 &nbsp;
-### 1.	Supervised Learning   
+#### 1.	Supervised Learning   
 
 In supervised learning models, machines are trained by examples, ie a set of sample labelled data was provided to the machine learning system in order to train it, and on that basis, it predicts the output. Generally the operator gives the machine learning algorithm a predefined dataset with specified inputs and outputs, and the algorithm needs to figure out how to get those inputs and outputs. The algorithm recognises patterns in data, learns from observations, and generate the predictions (Fig.1). The algorithm predicts and is corrected by the operator and this process is repeated till the algorithm reaches a high level of precision. Precisely supervised learning is based on the supervision, i.e. the operator is aware of the response predicted by the machine learning algorithms and its main goal is to map the input data with the output data. 
 
@@ -62,15 +59,15 @@ Fig1: Supervised Machine Learning Model for data Prediction
 
 Image source: https://www.javatpoint.com/supervised-machine-learning
 
-
+&nbsp;
 Supervised learning can be grouped further in two categories of algorithms:
 
 •	Classification          
 
 •	Regression
 
-&nbsp;
-#### Classification Algorithms: 
+
+##### Classification Algorithms: 
 
 In supervised learning, classification algorithms are used to predict a categorical variable or class label based on the features or attributes of the input data. Some of the commonly used classification algorithms in supervised learning are:
 
@@ -92,7 +89,7 @@ In supervised learning, classification algorithms are used to predict a categori
 
 &nbsp;
 
-#### Regression Algorithms: 
+##### Regression Algorithms: 
 
 
 In supervised learning, regression algorithms are used to predict a continuous output variable based on the input features or attributes. Some of the commonly used regression algorithms in supervised learning are:
@@ -118,8 +115,7 @@ In supervised learning, regression algorithms are used to predict a continuous o
 •	Neural Network Regression: This algorithm uses a network of nodes (neurons) that process input data to predict the continuous output variable.
 
 &nbsp;
-
-### 2.	Unsupervised Learning
+#### 2.	Unsupervised Learning
 
 Unsupervised learning is a learning method in which a machine learns without any supervision. The machine learning programme examines the data to detect trends. There is no response key or human interference to provide guidance. Instead, the machine analyses available data to discover correlations and linkages. The machine learning algorithm is left to evaluate massive data sets and address that data in an unsupervised learning process. The programme attempts to organise the data in a way that describes its structure. This could imply organizing the data into clusters or structuring it in a more organised manner. As it evaluates additional data, its capability to make decisions based on that data increases and gets more refined. The main goal of unsupervised learning is to restructure the input data into new features or a group of objects with similar patterns (Fig.2).
 
@@ -143,7 +139,7 @@ Unsupervised learning can be further classifieds into two categories of algorith
 
 &nbsp;
 
-#### Clustering Algorithms: 
+##### Clustering Algorithms: 
 
 Clustering algorithms are a type of unsupervised learning technique that aims to group similar objects or data points together in a way that maximizes intra-cluster similarity and minimizes inter-cluster similarity. There are several types of clustering algorithms, including:
 
@@ -163,7 +159,7 @@ These clustering algorithms are useful in a variety of applications such as imag
 
 &nbsp;
 
-#### Association algorithms: 
+##### Association algorithms: 
 
 Association algorithms are another type of unsupervised learning technique that aims to discover interesting relationships or patterns between different variables in a dataset. These algorithms are often used for market basket analysis, where the goal is to identify which items are frequently purchased together. Some popular association algorithms include:
 
@@ -176,7 +172,7 @@ Association algorithms are another type of unsupervised learning technique that 
 
 &nbsp;
 
-### 3.	Reinforcement Learning
+#### 3.	Reinforcement Learning
 
 Reinforcement learning focuses on training agents to make optimal decisions in an environment. The goal of reinforcement learning is to develop algorithms that can learn from experience and improve their performance over time. In reinforcement learning, an agent interacts with an environment by taking actions and receiving feedback in the form of rewards or penalties. The agent's goal is to learn a policy that maximizes its long-term reward. The agent learns by exploring different actions and observing their outcomes, updating its policy based on the rewards it receives. Reinforcement learning has a wide range of applications, including robotics, game playing, finance, and healthcare. Some popular reinforcement learning algorithms include Q-learning, SARSA, and deep reinforcement learning. Overall, reinforcement learning is a powerful approach to machine learning that allows agents to learn from experience and improve their decision-making over time
 
@@ -198,7 +194,7 @@ WEKA (Waikato Environment for Knowledge Analysis) is a popular open-source machi
 
 1.	Install and launch WEKA tool: User can download WEKA from the official website (https://www.cs.waikato.ac.nz/ml/weka/ ). Once downloaded, extract the files and launch WEKA from the command prompt or by double-clicking the WEKA.jar file.
 
-    <img src="images/4.jpg" title="" />
+<img src="images/4.jpg" title="" />
 
 &nbsp;
 
