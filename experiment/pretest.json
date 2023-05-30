@@ -2,35 +2,54 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "Which among this is a Machine Learning Model?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Supervised",
+        "b": "Unsupervised",
+        "c": "Reinforment",
+        "d": "All the above"
       },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which among this is not a basic component of machine learning?",
+      "answers": {
+        "a": "Data",
+        "b": "Data preprocessing",
+        "c": "Model",
+        "d": "Training and Testing"
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "AI is a subset of machine learning",
+      "answers": {
+        "a": "True",
+        "b": "False"
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "For which learning is class label used?",
+      "answers": {
+        "a": "Supervised",
+        "b": "Unsupervised",
+        "c": "Semi supervised ",
+        "d": "Reinforcement"
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "Which among this is a clustering algorithm?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "SVM",
+        "b": "Naive Bayec",
+        "c": "k-means ",
+        "d": "NN"
       },
       "correctAnswer": "c",
       "difficulty": "beginner"
