@@ -2,45 +2,37 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "What is the file format used in WEKA?",
+      "question": "This is a Sample Question 1?",
       "answers": {
-        "a": ".txt",
-        "b": ".xlsx",
-        "c": ".arff",
-        "d": ".fasta"
-      }
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "Visualisation of data in WEKA can be done via bar charts or dot plots",
-      "answers": {
-        "a": "True",
-        "b": "False"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
+      },
+      "explanations": {
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "Different panels in WEKA include",
+      "question": "This is a Sample Question 2?",
       "answers": {
-        "a": "Classify",
-        "b": "Cluster",
-        "c": "Associate",
-        "d": "All the above"
+        "a": "answer1",
+        "b": "answer2",
+        "c": "answer3",
+        "d": "answer4"
       },
-      "correctAnswer": "d",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "WEKA is",
-      "answers": {
-        "a": "Waikato Explorer for Knowledge Analysis",
-        "b": "Western Environment for Knowledge Analysis",
-        "c": "Waikato Explorer for Knowledge Atlas",
-        "d": "Waikato Environment for Knowledge Analysis"
+      "explanations": {
+        "a": "Explanation 1  <a href='www.google.com'>here</a>",
+        "b": "Explanation 2",
+        "c": "Explanation 2",
+        "d": "Explanation 2"
       },
-      "correctAnswer": "d",
+      "correctAnswer": "c",
       "difficulty": "beginner"
     }
   ]
