@@ -12,8 +12,8 @@ The goal of proposed virtual laboratories is to achieve a conceptual understandi
   
 With this experiment, the user can
     1. Understand the concepts of Artificial Intelligence, Machine Learning and Deep Learning
-    2. Quantitatively evaluate genome organization and biological functions of the genome in a broader sense
-    3. Apply knowledge on sequence composition for molecular biology experiments
+    2. Learn to do machine learning work with WEKA
+    3. Understand the difference between different types of learning
 
 <b>Name of Developer | <b> Dr. Shyam Diwakar 
 :--|:--|
