@@ -2,9 +2,8 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="css\main.css">
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
   <title>ARFF File Upload and Preprocess</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -12,11 +11,18 @@
 
 <body>
   <div class='at-container'>
-    <img src="images\logo.png" width="300" height="100" style="margin-left:2%;">
+    <img src="images/logo.png" width="300" height="100" style="margin-left:2%;">
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <div id='header'>Basic Machine Learning using the WEKA tool</div><br><br><br>
   </div>
-  <div enctype="multipart/form-data" style="background-color: #d0d2d6;width: 1500px;margin-left: 200px;">
+  <a href="#preprocess" id="preprocesss" class="w3-bar-item w3-button w3-padding-large"
+    onclick="preprocess()"><b>Preprocess</b></a>
+  <a href="#classify" id="classifys" class="w3-bar-item w3-button w3-padding-larges disabled-link"
+    style="margin-left:2px;" onclick="classify()"><b>Classify</b></a>
+
+
+  <div id="myDiv"
+    style="background-color: #d0d2d6; width: 100%; max-width: 1500px; margin-left: auto; margin-right: auto;">
     <br><br>
     <div class="file-upload">
       <label for="fileinput" style="font-size:18px;">Choose an ARFF file to upload</label>
@@ -65,6 +71,13 @@
 
         <ol id="myArrayElement"></ol>
       </div>
+      <div id="allvalueoutput-container"></div>
+      <div id="label">
+        <label for="label1">Label</label>
+        <label for="label2">Count</label>
+      </div>
+
+
     </div>
 
 
@@ -89,6 +102,7 @@
         </table>
         <div id="output-container" style="font-weight: bold; text-align: left;margin-left: 50px;"></div>
 
+
       </div>
     </div>
 
@@ -100,8 +114,6 @@
 
 
   <script>
-
-
     var coll = document.getElementsByClassName("collapsible");
     var i;
 
@@ -120,10 +132,26 @@
     document.getElementById('attrribute').style.visibility = 'hidden';
     document.getElementById('selected').style.visibility = 'hidden';
     document.getElementById('resetbutton').style.visibility = 'hidden';
+    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+    document.getElementById('label').style.visibility = 'hidden';
 
-    var data = null;
+    document.getElementById("classifys").classList.add("disabled-link");
+
+    function preprocess() {
+      var elements = document.getElementsByClassName("file-upload");
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = "block";
+      }
+      document.getElementById('upbutton').style.visibility = 'visible';
+      upload();
+
+
+    }
+
+
     function upload() {
 
+      var data = null;
       var fileInput = document.getElementById('fileinput');
       var file = fileInput.files[0];
       if (!file.name.endsWith('.arff')) {
@@ -138,6 +166,10 @@
         const datas = parseARFF(arffData);
 
         const distinctValues = getDistinctValues(datas);
+
+        const allValues = getAllValues(datas);
+
+
         data = reader.result;
         document.getElementById('fileContent').value = data;
         const lines = data.split('\n');
@@ -175,7 +207,9 @@
         document.getElementById('relation').textContent = relationName;
 
         const attributeLines = data.match(/^@attribute\s.*|^@ATTRIBUTE\s.*/gm);
+
         const attributeNames = attributeLines.map(line => line.split(/[\s{}]+/)[1].replace(/'/g, ''));
+
 
         const numAttributes = attributeNames.length;
         document.getElementById('attribute').textContent = numAttributes;
@@ -210,10 +244,14 @@
         // Listing checkboxes with attribute names
         const list = document.getElementById('myArrayElement');
         list.innerHTML = attributeNames.map(i => `<li><input type="checkbox" data-type="${attributeType[i]}">${i}</li>`).join('');
+
+
         // Select all checkboxes in a given list
         const checkboxes = list.querySelectorAll('input[type="checkbox"]');
+
         // Select the third collapsible element on the page
         const collapsible3 = document.getElementsByClassName("collapsible")[2];
+
         // Add a change event listener to each checkbox
         checkboxes.forEach(checkbox => {
           checkbox.addEventListener('change', () => {
@@ -237,10 +275,28 @@
                 return attributeType === 'numeric' ? parseFloat(value) : value;
               });
 
+
               // Display the distinct values and their counts in the output container
               const outputContainer = document.getElementById('output-container');
               outputContainer.innerHTML = '';
               if (attributeType === 'numeric') {
+                const collapsibles = document.getElementsByClassName("collapsible");
+                const collapsible2 = collapsibles[1];
+                collapsible2.addEventListener("click", function () {
+                  this.classList.toggle("active");
+                  var content = this.nextElementSibling;
+                  if (content.style.display === "block") {
+                    content.style.display = "none";
+                    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+                    document.getElementById('label').style.visibility = 'hidden';
+
+                  } else {
+                    content.style.display = "block";
+                    document.getElementById('allvalueoutput-container').style.visibility = 'visible';
+                    document.getElementById('label').style.visibility = 'visible';
+
+                  }
+                });
                 const minValue = Math.min(...attributeData);
                 const maxValue = Math.max(...attributeData);
                 const meanValue = attributeData.reduce((a, b) => a + b, 0) / attributeData.length;
@@ -311,10 +367,11 @@
                 const chartCanvas = document.createElement('canvas');
                 chartCanvas.id = 'numeric-chart';
                 outputContainer.appendChild(chartCanvas);
-                 
+
                 window.myChart = new Chart(chartCanvas, chartConfig);
 
               } else if (attributeType === 'nominal') {
+
                 // Destroy old chart if it exists
                 if (window.myChart) {
                   window.myChart.destroy();
@@ -325,13 +382,15 @@
                 attributeData.forEach(value => {
                   valueCounts[value] = (valueCounts[value] || 0) + 1;
                 });
-      
+
                 // Display the value counts in the output container
                 Object.keys(valueCounts).forEach(value => {
                   const count = valueCounts[value];
                   const valueElement = document.createElement('div');
                   valueElement.innerText = `${value}: ${count}`;
-                  outputContainer.appendChild(valueElement);    
+                  outputContainer.appendChild(valueElement);
+
+
                 });
 
                 // Define new colors
@@ -383,6 +442,48 @@
                 const myChart = new Chart(chartCanvas, chartConfig);
 
               }
+              const outputContainers = document.getElementById('allvalueoutput-container');
+              outputContainers.innerHTML = '';
+              if (attributeType === 'numeric') {
+
+                document.getElementById('allvalueoutput-container').style.visibility = 'visible';
+                document.getElementById('label').style.visibility = 'visible';
+                const collapsibles = document.getElementsByClassName("collapsible");
+                const collapsible2 = collapsibles[1];
+                collapsible2.addEventListener("click", function () {
+                  this.classList.toggle("active");
+                  var content = this.nextElementSibling;
+                  if (content.style.display === "block") {
+                    content.style.display = "none";
+                    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+                    document.getElementById('label').style.visibility = 'hidden';
+
+                  } else {
+                    content.style.display = "block";
+                    document.getElementById('allvalueoutput-container').style.visibility = 'visible';
+                    document.getElementById('label').style.visibility = 'visible';
+
+                  }
+                });
+                // Count the distinct values in the attribute data
+                const valueCounts = {};
+                attributeData.forEach(value => {
+                  valueCounts[value] = (valueCounts[value] || 0) + 1;
+                });
+
+                // Display the value counts in the output container
+                Object.keys(valueCounts).forEach(value => {
+                  const count = valueCounts[value];
+                  const valueElement = document.createElement('div');
+                  valueElement.innerHTML = `${value}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${count}`;
+                  outputContainers.appendChild(valueElement);
+                });
+
+              } else {
+                document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+                document.getElementById("label").style.visibility = 'hidden';
+              }
+
               // Extract the distinct values for the selected attribute and update the UI elements
               const distinctValuesForAttribute = distinctValues[attributeIndex];
 
@@ -394,6 +495,8 @@
               // Show the collapsible element
               collapsible3.classList.add("active");
               collapsible3.nextElementSibling.style.display = "block";
+              document.getElementById("classifys").classList.remove("disabled-link");
+
             } else {
               // Clear the UI elements and hide the collapsible element
               document.getElementById('name').textContent = '';
@@ -401,9 +504,15 @@
               document.getElementById('distinct').textContent = '';
               document.getElementById('output-container').textContent = '';
               collapsible3.nextElementSibling.style.display = "none";
+              document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+              document.getElementById('label').style.visibility = 'hidden';
+
+
+
             }
           });
         });
+
         function parseARFF(arffData) {
           const lines = arffData.split('\n');
           let dataStart = 0;
@@ -438,15 +547,55 @@
           return distinctValues;
 
         }
+
+        function getAllValues(data) {
+          const allValues = {};
+          for (let i = 0; i < data[0].length; i++) {
+            const attributeValues = {};
+            for (let j = 0; j < data.length; j++) {
+              const value = data[j][i];
+              if (attributeValues.hasOwnProperty(value)) {
+                attributeValues[value]++;
+              } else {
+                attributeValues[value] = 1;
+              }
+            }
+            allValues[i] = attributeValues;
+
+          }
+          return allValues;
+
+        }
       };
       document.getElementById('current').style.visibility = 'visible';
       document.getElementById('attrribute').style.visibility = 'visible';
       document.getElementById('selected').style.visibility = 'visible';
       document.getElementById('resetbutton').style.visibility = 'visible';
+      document.getElementById("classifys").classList.remove("disabled-link");
 
       reader.readAsText(file);
 
     }
+    function classify() {
+      document.getElementById('upbutton').style.visibility = 'hidden';
+      var elements = document.getElementsByClassName("file-upload");
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = "none";
+      }
+      document.getElementById('current').style.visibility = 'hidden';
+      document.getElementById('attrribute').style.visibility = 'hidden';
+      document.getElementById('selected').style.visibility = 'hidden';
+      document.getElementById('resetbutton').style.visibility = 'hidden';
+      document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
+      document.getElementById('label').style.visibility = 'hidden';
+
+    }
+
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+
     function reset() {
 
       for (i = 0; i < coll.length; i++) {
@@ -475,10 +624,15 @@
       document.getElementById("atype").innerHTML = "";
       document.getElementById("distinct").innerHTML = "";
       document.getElementById("output-container").innerHTML = "";
+      document.getElementById("allvalueoutput-container").innerHTML = "";
+      document.getElementById("label").value = "";
       document.getElementById('current').style.visibility = 'hidden';
       document.getElementById('attrribute').style.visibility = 'hidden';
       document.getElementById('selected').style.visibility = 'hidden';
       document.getElementById('resetbutton').style.visibility = 'hidden';
+      document.getElementById("allvalueoutput-container").style.visibility = 'hidden';
+      document.getElementById("label").style.visibility = 'hidden';
+      document.getElementById("classifys").classList.add("disabled-link");
       for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function () {
           this.classList.toggle("active");
