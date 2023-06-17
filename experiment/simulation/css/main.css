@@ -1,651 +1,295 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <link rel="stylesheet" type="text/css" href="style.css">
+button {
+    background-color: #3284d1;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
   
-  <title>ARFF File Upload and Preprocess</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-</head>
-
-<body>
-  <div class='at-container'>
-    <img src="C:\Users\amrita\Documents\logo.png" width="300" height="100" style="margin-left:2%;">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <div id='header'>Basic Machine Learning using the WEKA tool</div><br><br><br>
-  </div>
-  <a href="#preprocess" id="preprocesss" class="w3-bar-item w3-button w3-padding-large"
-    onclick="preprocess()"><b>Preprocess</b></a>
-  <a href="#classify" id="classifys" class="w3-bar-item w3-button w3-padding-larges disabled-link"
-    style="margin-left:2px;" onclick="classify()"><b>Classify</b></a>
-
-
-    <div id="myDiv"
-    style="background-color: #d0d2d6; width: 100%; max-width: 1500px; margin-left: auto; margin-right: auto;">
-    <br><br>
-    <div class="file-upload">
-      <label for="fileinput" style="font-size:18px;">Choose an ARFF file to upload</label>
-      <input type="file" id="fileinput" hidden>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="upbutton"
-        onclick="upload()">Upload</button><br><br><br>
-    </div>
-
-
-    <div id="current">
-      <button type="button" class="collapsible"></button>
-      <label for="currentRel"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Relation</b></label>
-      <div class="contents" style="text-align: left;"><br>
-        <table style="display: inline-block;">
-          <tr>
-            <td><textarea id="fileContent" cols="50" rows="10" disabled></textarea></td>
-          </tr><br>
-        </table>
-        <table style="display: inline-block; margin-left: 50px; vertical-align: 50px; ">
-          <tr>
-            <td><label for="Relation"><b>Relation:</b></label></td>
-            <td><label id="relation" name="relation" style="font-weight: bold;"></label></td>
-          </tr>
-          <tr>
-            <td><label for="Sumofweights"><b>Sum of weights:</b></label></td>
-            <td><label id="sumofweights" name="sumofweights" style="font-weight: bold;"></label></td>
-          </tr>
-          <tr>
-            <td><label for="Instances"><b>Instances:</b></label></td>
-            <td><label id="instance" name="instance" style="font-weight: bold;"></label></td>
-          </tr>
-          <tr>
-            <td><label for="attribute"><b>Attribute:</b></label></td>
-            <td><label id="attribute" name="attribute" style="font-weight: bold;"></label></td>
-          </tr>
-        </table>
-
-        <br><br>
-      </div>
-    </div>
-
-
-    <div id="attrribute">
-      <button type="button" class="collapsible">Select an Attribute</button>
-      <div class="content">
-
-        <ol id="myArrayElement"></ol>
-      </div>
-      <div id="allvalueoutput-container"></div>
-      <div id="label">
-        <label for="label1">Label</label>
-        <label for="label2">Count</label>
-      </div>
-
-
-    </div>
-
-
-    <div id="selected">
-      <button type="button" class="collapsible">Selected Attributes</button>
-      <div class="content" style="text-align: left;"><br>
-        </table>
-        <table style="display: inline-block; margin-left: 50px; vertical-align: top; ">
-          <tr>
-            <td><label for="Name"><b>Name:</b></label></td>
-            <td><label id="name" name="name" style="font-weight: bold;"></label></td>
-          </tr>
-          <tr>
-            <td><label for="Type"><b>Type:</b></label></td>
-            <td><label id="atype" name="atype" style="font-weight: bold;"></label></td>
-          </tr>
-          <tr>
-            <td><label for="Distinct"><b>Distinct:</b></label></td>
-            <td><label id="distinct" name="distinct" style="font-weight: bold;"></label></td>
-          </tr>
-
-        </table>
-        <div id="output-container" style="font-weight: bold; text-align: left;margin-left: 50px;"></div>
-
-
-      </div>
-    </div>
-
-
-    <div id="reset">
-      <input type="reset" id="resetbutton" value="Reset" onclick="reset()" /><br><br>
-    </div>
-  </div>
-
-
-  <script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function () {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });
+  body {
+    background-color: #f1f1f1;
+  }
+  
+  /* Style the file input and upload button */
+  #fileInput {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  
+  .collapsible {
+    background-color: #5c5c68;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 10px;
+  }
+  
+  .active,
+  .collapsible:hover {
+    background-color: #249dbb;
+  
+  }
+  
+  .contents {
+    padding: 0 18px;
+    display: block;
+    overflow: hidden;
+    background-color: #d0d2d6;
+  }
+  
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #d0d2d6;
+  }
+  
+  /* Disable the preprocess button by default */
+  .align-right {
+    display: block;
+    text-align: center;
+  }
+  
+  input[type=reset] {
+    background-color: #909290;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-left: 5000px;
+  }
+  
+  
+  #header {
+    color: #4f2037;
+    font-weight: bold;
+    font-size: 46px;
+    justify-content: center;
+    text-decoration-color: #4f2037;
+    position: relative;
+    align-items: center;
+    margin-left: 1%;
+    padding-top: 30px;
+  }
+  
+  div.at-container {
+    display: flex;
+  }
+  
+  label[for="fileinput"] {
+    background-color: rgb(2, 79, 129);
+    color: white;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 200px;
+    width: 200px;
+    height: 50px;
+    border-radius: 180px;
+    position: relative;
+    cursor: pointer;
+    line-height: 12px;
+    text-align: center;
+  }
+  
+  .file-upload {
+    text-align: center;
+  }
+  
+  button[type="button"] {
+    background-color: rgb(2, 79, 129);
+    color: white;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    width: 200px;
+    height: 50px;
+    border-radius: 180px;
+    position: relative;
+    cursor: pointer;
+    line-height: 12px;
+    text-align: center;
+  }
+  
+  #upbutton {
+    background-color: rgb(170, 22, 121);
+    color: white;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    width: 200px;
+    height: 40px;
+    border-radius: 180px;
+    position: relative;
+    cursor: pointer;
+    line-height: 12px;
+    text-align: center;
+  }
+  
+  #resetbutton {
+    background-color: rgb(170, 22, 121);
+    color: white;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    width: 200px;
+    height: 40px;
+    border-radius: 180px;
+    position: relative;
+    cursor: pointer;
+    line-height: 12px;
+    text-align: center;
+    margin-left: 320px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  #fileContent,
+  #relation,
+  #sumofweights,
+  #instance,
+  #attribute,
+  #name,
+  #atype,
+  #distinct {
+    margin-bottom: 10px;
+  }
+  
+  #current {
+    margin-left: 300px;
+    margin-bottom:-20px;
+  }
+  
+  #attrribute {
+    margin-left: 320px;
+  }
+  
+  #selected {
+    margin-left: 320px;
+  }
+  #current button.collapsible {
+    display: none;
+  }
+  
+  #fileContent {
+    margin-top: -35px;
+  }
+  #output-container {
+    font-weight: bold;
+    /* background-color: #f0f0f0; */
+    border: 1px solid #080808;
+    padding: 10px;
+    margin-top: 10px;
+    width: 300px;;
+    background-color: #f1f1f1;
+  }
+  /* #allvalueoutput-container {
+    padding: 10px;
+    margin-top: 10px;
+    width: 300px;;
+    background-color: #f1f1f1;
+    margin-left: 200px;
+   
+    overflow: auto; 
+    max-height: 200px;
+    text-align: left;
+   
+    font-weight: bold; 
+  } */
+  
+  #allvalueoutput-container {
+  position: absolute; 
+   top: 490px; 
+   left: 0;
+   padding: 10px;
+   width: 450px;
+   background-color: #f1f1f1;
+   text-align: center;
+   font-weight: bold;
+   margin-left: 900px;
+   max-height: 100px;
+   overflow: auto; 
+   font-weight: bold; 
+   margin-top: 50px;
+  }
+  label[for="label1"] {
+    position: absolute; 
+     top: 450px; 
+     left: 0;
+     padding: 10px;
+     width: 250px;
+     background-color: #f1f1f1;
+     text-align: center;
+     font-weight: bold;
+     margin-left: 900px;
+     max-height: 100px;
+     overflow: auto; 
+     font-weight: bold; 
+     margin-top: 50px;
     }
-    document.getElementById('current').style.visibility = 'hidden';
-    document.getElementById('attrribute').style.visibility = 'hidden';
-    document.getElementById('selected').style.visibility = 'hidden';
-    document.getElementById('resetbutton').style.visibility = 'hidden';
-    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-    document.getElementById('label').style.visibility = 'hidden';
-
-    document.getElementById("classifys").classList.add("disabled-link");
-
-    function preprocess() {
-      var elements = document.getElementsByClassName("file-upload");
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].style.display = "block";
+    label[for="label2"] {
+      position: absolute; 
+       top: 450px; 
+       left: 0;
+       padding: 10px;
+       width: 250px;
+       background-color: #f1f1f1;
+       text-align: center;
+       font-weight: bold;
+       margin-left: 1100px;
+       max-height: 100px;
+       overflow: auto; 
+       font-weight: bold; 
+       margin-top: 50px;
       }
-      document.getElementById('upbutton').style.visibility = 'visible';
-      upload();
-
-
-    }
-
-
-    function upload() {
-
-      var data = null;
-      var fileInput = document.getElementById('fileinput');
-      var file = fileInput.files[0];
-      if (!file.name.endsWith('.arff')) {
-        alert('Please upload an ARFF file');
-        return;
-      }
-      var reader = new FileReader();
-
-      // Function to be executed when the FileReader loads the file
-      reader.onload = function (event) {
-        const arffData = event.target.result;
-        const datas = parseARFF(arffData);
-
-        const distinctValues = getDistinctValues(datas);
-
-        const allValues = getAllValues(datas);
-
-
-        data = reader.result;
-        document.getElementById('fileContent').value = data;
-        const lines = data.split('\n');
-
-
-
-        let dataStartIndex = -1;
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line.startsWith("@data") || line.startsWith("@DATA")) {
-            dataStartIndex = i + 1;
-            break;
-          }
-        }
-
-        if (dataStartIndex === -1) {
-          console.log("uploading");
-          return;
-        }
-
-        const dataLines = [];
-        for (let i = dataStartIndex; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line === "" || line.startsWith("%")) {
-            continue;
-          }
-          dataLines.push(line);
-        }
-
-        const numInstances = dataLines.length;
-        document.getElementById('instance').textContent = numInstances;
-
-        var relationName = data.match(/@relation\s+'?([^'\n]+)'?\s*\n/i);
-        relationName = relationName[1];
-        document.getElementById('relation').textContent = relationName;
-
-        const attributeLines = data.match(/^@attribute\s.*|^@ATTRIBUTE\s.*/gm);
-
-        const attributeNames = attributeLines.map(line => line.split(/[\s{}]+/)[1].replace(/'/g, ''));
-
-
-        const numAttributes = attributeNames.length;
-        document.getElementById('attribute').textContent = numAttributes;
-        document.getElementById("sumofweights").textContent = numInstances;
-
-        let attributeType = {};
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i].trim();
-
-          if (line.startsWith('%') || line.length === 0) {
-            continue;
-          }
-
-          if (line.startsWith('@attribute')) {
-            const attributeInfo = line.split(/\s+/);
-            const attributeName = attributeInfo[1];
-            const attributeTypeString = attributeInfo[2];
-
-            let type;
-            if (attributeTypeString.startsWith('{')) {
-              type = 'nominal';
-            } else if (attributeTypeString === 'numeric' || attributeTypeString === 'real' || attributeTypeString === 'REAL') {
-              type = 'numeric';
-            } else {
-              type = 'string';
-            }
-
-            attributeType[attributeName] = type;
-          }
-        }
-
-        // Listing checkboxes with attribute names
-        const list = document.getElementById('myArrayElement');
-        list.innerHTML = attributeNames.map(i => `<li><input type="checkbox" data-type="${attributeType[i]}">${i}</li>`).join('');
-
-
-        // Select all checkboxes in a given list
-        const checkboxes = list.querySelectorAll('input[type="checkbox"]');
-
-        // Select the third collapsible element on the page
-        const collapsible3 = document.getElementsByClassName("collapsible")[2];
-
-        // Add a change event listener to each checkbox
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-              // Uncheck all other checkboxes
-              checkboxes.forEach(otherCheckbox => {
-                if (otherCheckbox !== checkbox) {
-                  otherCheckbox.checked = false;
-                }
-              });
-
-              // Extract the attribute name and type from the checkbox and find its index
-              const attributeName = checkbox.parentNode.innerText.trim();
-              const attributeType = checkbox.getAttribute('data-type');
-              const attributeIndex = attributeNames.indexOf(attributeName);
-
-              // Extract the attribute data from the data lines and filter by the selected attribute
-              const attributeData = dataLines.map(line => {
-                const values = line.split(',');
-                const value = values[attributeIndex].trim();
-                return attributeType === 'numeric' ? parseFloat(value) : value;
-              });
-
-
-              // Display the distinct values and their counts in the output container
-              const outputContainer = document.getElementById('output-container');
-              outputContainer.innerHTML = '';
-              if (attributeType === 'numeric') {
-                const collapsibles = document.getElementsByClassName("collapsible");
-                const collapsible2 = collapsibles[1];
-                collapsible2.addEventListener("click", function () {
-                  this.classList.toggle("active");
-                  var content = this.nextElementSibling;
-                  if (content.style.display === "block") {
-                    content.style.display = "none";
-                    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-                    document.getElementById('label').style.visibility = 'hidden';
-
-                  } else {
-                    content.style.display = "block";
-                    document.getElementById('allvalueoutput-container').style.visibility = 'visible';
-                    document.getElementById('label').style.visibility = 'visible';
-
-                  }
-                });
-                const minValue = Math.min(...attributeData);
-                const maxValue = Math.max(...attributeData);
-                const meanValue = attributeData.reduce((a, b) => a + b, 0) / attributeData.length;
-                const stdDeviation = Math.sqrt(attributeData.reduce((a, b) => a + (b - meanValue) ** 2, 0) / attributeData.length);
-
-                const minElement = document.createElement('div');
-                minElement.innerText = `Minimum: ${minValue}`;
-                outputContainer.appendChild(minElement);
-
-                const maxElement = document.createElement('div');
-                maxElement.innerText = `Maximum: ${maxValue}`;
-                outputContainer.appendChild(maxElement);
-
-                const meanElement = document.createElement('div');
-                meanElement.innerText = `Mean: ${meanValue.toFixed(2)}`;
-                outputContainer.appendChild(meanElement);
-
-                const stdDevElement = document.createElement('div');
-                stdDevElement.innerText = `Standard Deviation: ${stdDeviation.toFixed(2)}`;
-                outputContainer.appendChild(stdDevElement);
-
-                // Get the canvas element
-                const canvas = document.getElementById('bar-chart');
-                if (window.myChart) {
-                  window.myChart.destroy();
-                }
-
-                // Create the chart data
-                const chartData = {
-                  labels: ['Minimum', 'Maximum', 'Mean', 'Standard Deviation'],
-                  datasets: [{
-                    label: 'Values',
-                    data: [minValue, maxValue, meanValue, stdDeviation],
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.8)',
-                      'rgba(54, 162, 235, 0.8)',
-                      'rgba(255, 206, 86, 0.8)',
-                      'rgba(75, 192, 192, 0.8)',
-                      'rgba(153, 102, 255, 0.8)',
-                      'rgba(255, 159, 64, 0.8)'
-                    ],
-                    borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                  }]
-                };
-
-                const chartConfig = {
-                  type: 'bar',
-                  data: chartData,
-                  options: {
-                    scales: {
-                      yAxes: [{
-                        ticks: {
-                          beginAtZero: true
-                        }
-                      }]
-                    }
-                  }
-                };
-
-                const chartCanvas = document.createElement('canvas');
-                chartCanvas.id = 'numeric-chart';
-                outputContainer.appendChild(chartCanvas);
-
-                window.myChart = new Chart(chartCanvas, chartConfig);
-
-              } else if (attributeType === 'nominal') {
-
-                // Destroy old chart if it exists
-                if (window.myChart) {
-                  window.myChart.destroy();
-                }
-
-                // Count the distinct values in the attribute data
-                const valueCounts = {};
-                attributeData.forEach(value => {
-                  valueCounts[value] = (valueCounts[value] || 0) + 1;
-                });
-
-                // Display the value counts in the output container
-                Object.keys(valueCounts).forEach(value => {
-                  const count = valueCounts[value];
-                  const valueElement = document.createElement('div');
-                  valueElement.innerText = `${value}: ${count}`;
-                  outputContainer.appendChild(valueElement);
-
-
-                });
-
-                // Define new colors
-                const colors = [
-                  'rgba(255, 99, 132, 0.8)',
-                  'rgba(54, 162, 235, 0.8)',
-                  'rgba(255, 206, 86, 0.8)',
-                  'rgba(75, 192, 192, 0.8)',
-                  'rgba(153, 102, 255, 0.8)',
-                  'rgba(255, 159, 64, 0.8)'
-                ];
-
-                // Update chart data with new colors
-                const chartData = {
-                  labels: Object.keys(valueCounts),
-                  datasets: [{
-                    label: 'Values',
-                    data: Object.values(valueCounts),
-                    backgroundColor: colors,
-                    borderColor: colors,
-                    borderWidth: 1
-                  }]
-                };
-
-                // Use updated chart data to create the chart
-                const chartConfig = {
-                  type: 'bar',
-                  data: chartData,
-                  options: {
-                    scales: {
-                      yAxes: [{
-                        ticks: {
-                          beginAtZero: true
-                        }
-                      }]
-                    },
-                    title: {
-                      display: true,
-                      text: 'Value Counts by Category'
-                    },
-                    legend: {
-                      display: false
-                    }
-                  }
-                };
-                const chartCanvas = document.createElement('canvas');
-                chartCanvas.id = 'bar-chart-2';
-                outputContainer.appendChild(chartCanvas);
-                const myChart = new Chart(chartCanvas, chartConfig);
-
-              }
-              const outputContainers = document.getElementById('allvalueoutput-container');
-              outputContainers.innerHTML = '';
-              if (attributeType === 'numeric') {
-
-                document.getElementById('allvalueoutput-container').style.visibility = 'visible';
-                document.getElementById('label').style.visibility = 'visible';
-                const collapsibles = document.getElementsByClassName("collapsible");
-                const collapsible2 = collapsibles[1];
-                collapsible2.addEventListener("click", function () {
-                  this.classList.toggle("active");
-                  var content = this.nextElementSibling;
-                  if (content.style.display === "block") {
-                    content.style.display = "none";
-                    document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-                    document.getElementById('label').style.visibility = 'hidden';
-
-                  } else {
-                    content.style.display = "block";
-                    document.getElementById('allvalueoutput-container').style.visibility = 'visible';
-                    document.getElementById('label').style.visibility = 'visible';
-
-                  }
-                });
-                // Count the distinct values in the attribute data
-                const valueCounts = {};
-                attributeData.forEach(value => {
-                  valueCounts[value] = (valueCounts[value] || 0) + 1;
-                });
-
-                // Display the value counts in the output container
-                Object.keys(valueCounts).forEach(value => {
-                  const count = valueCounts[value];
-                  const valueElement = document.createElement('div');
-                  valueElement.innerHTML = `${value}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${count}`;
-                  outputContainers.appendChild(valueElement);
-                });
-
-              } else {
-                document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-                document.getElementById("label").style.visibility = 'hidden';
-              }
-
-              // Extract the distinct values for the selected attribute and update the UI elements
-              const distinctValuesForAttribute = distinctValues[attributeIndex];
-
-              const distinctLength = distinctValuesForAttribute.length;
-              document.getElementById('distinct').textContent = distinctLength;
-              document.getElementById('name').textContent = attributeName;
-              document.getElementById('atype').textContent = attributeType;
-
-              // Show the collapsible element
-              collapsible3.classList.add("active");
-              collapsible3.nextElementSibling.style.display = "block";
-              document.getElementById("classifys").classList.remove("disabled-link");
-
-            } else {
-              // Clear the UI elements and hide the collapsible element
-              document.getElementById('name').textContent = '';
-              document.getElementById('atype').textContent = '';
-              document.getElementById('distinct').textContent = '';
-              document.getElementById('output-container').textContent = '';
-              collapsible3.nextElementSibling.style.display = "none";
-              document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-              document.getElementById('label').style.visibility = 'hidden';
-
-
-
-            }
-          });
-        });
-
-        function parseARFF(arffData) {
-          const lines = arffData.split('\n');
-          let dataStart = 0;
-          for (let i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith('@data')) {
-              dataStart = i + 1;
-              break;
-            }
-          }
-          const data = [];
-          for (let i = dataStart; i < lines.length; i++) {
-            if (!lines[i].startsWith('%') && lines[i].trim() !== '') {
-              const values = lines[i].split(',');
-              data.push(values);
-            }
-          }
-          return data;
-
-        }
-        //find distinct value
-        function getDistinctValues(data) {
-          const distinctValues = {};
-          for (let i = 0; i < data[0].length; i++) {
-            const attributeValues = new Set();
-            for (let j = 0; j < data.length; j++) {
-              attributeValues.add(data[j][i]);
-            }
-            distinctValues[i] = [...attributeValues];
-
-
-          }
-          return distinctValues;
-
-        }
-
-        function getAllValues(data) {
-          const allValues = {};
-          for (let i = 0; i < data[0].length; i++) {
-            const attributeValues = {};
-            for (let j = 0; j < data.length; j++) {
-              const value = data[j][i];
-              if (attributeValues.hasOwnProperty(value)) {
-                attributeValues[value]++;
-              } else {
-                attributeValues[value] = 1;
-              }
-            }
-            allValues[i] = attributeValues;
-
-          }
-          return allValues;
-
-        }
-      };
-      document.getElementById('current').style.visibility = 'visible';
-      document.getElementById('attrribute').style.visibility = 'visible';
-      document.getElementById('selected').style.visibility = 'visible';
-      document.getElementById('resetbutton').style.visibility = 'visible';
-      document.getElementById("classifys").classList.remove("disabled-link");
-
-      reader.readAsText(file);
-
-    }
-    function classify() {
-      document.getElementById('upbutton').style.visibility = 'hidden';
-      var elements = document.getElementsByClassName("file-upload");
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].style.display = "none";
-      }
-      document.getElementById('current').style.visibility = 'hidden';
-      document.getElementById('attrribute').style.visibility = 'hidden';
-      document.getElementById('selected').style.visibility = 'hidden';
-      document.getElementById('resetbutton').style.visibility = 'hidden';
-      document.getElementById('allvalueoutput-container').style.visibility = 'hidden';
-      document.getElementById('label').style.visibility = 'hidden';
-
-    }
-
-    function myFunction() {
-      document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-
-    function reset() {
-
-      for (i = 0; i < coll.length; i++) {
-        coll[i].classList.remove("active");
-        coll[i].nextElementSibling.style.display = "none";
-      }
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
-          this.classList.toggle("active");
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
-        });
-      }
-
-      document.getElementById("fileContent").value = "";
-      document.getElementById("relation").innerHTML = "";
-      document.getElementById("sumofweights").innerHTML = "";
-      document.getElementById("instance").innerHTML = "";
-      document.getElementById("attribute").innerHTML = "";
-      document.getElementById("myArrayElement").innerHTML = "";
-      document.getElementById("name").innerHTML = "";
-      document.getElementById("atype").innerHTML = "";
-      document.getElementById("distinct").innerHTML = "";
-      document.getElementById("output-container").innerHTML = "";
-      document.getElementById("allvalueoutput-container").innerHTML = "";
-      document.getElementById("label").value = "";
-      document.getElementById('current').style.visibility = 'hidden';
-      document.getElementById('attrribute').style.visibility = 'hidden';
-      document.getElementById('selected').style.visibility = 'hidden';
-      document.getElementById('resetbutton').style.visibility = 'hidden';
-      document.getElementById("allvalueoutput-container").style.visibility = 'hidden';
-      document.getElementById("label").style.visibility = 'hidden';
-      document.getElementById("classifys").classList.add("disabled-link");
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
-          this.classList.toggle("active");
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
-        });
-      }
-    }
-  </script>
-</body>
-
-</html>
+      .w3-btn,
+  .w3-button {
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-left: 200px;
+    background-color: #d0d2d6;
+    margin-bottom: 2px;
+    font-size: large;
+  }
+  
+  .w3-btn:hover,
+  .w3-button:hover {
+    background-color: rgb(2, 79, 129)
+  }
+  
+  .disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
