@@ -2,34 +2,34 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Which among this is a Machine Learning Model?",
+      "question": "What is the file format used in WEKA?",
       "answers": {
-        "a": "Supervised",
-        "b": "Unsupervised",
-        "c": "Reinforment",
+        "a": ".txt",
+        "b": ".xlsx",
+        "c": ".arff",
+        "d": ".fasta"
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Different panels in WEKA include",
+      "answers": {
+        "a": "Classify",
+        "b": "Cluster",
+        "c": "Associate",
         "d": "All the above"
       },
       "correctAnswer": "d",
       "difficulty": "beginner"
     },
     {
-      "question": "Which among this is not a basic component of machine learning?",
-      "answers": {
-        "a": "Data",
-        "b": "Data preprocessing",
-        "c": "Model",
-        "d": "Training and Testing"
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "AI is a subset of machine learning",
+      "question": "Visualisation of data in WEKA can be done via bar charts or dot plots",
       "answers": {
         "a": "True",
         "b": "False"
       },
-      "correctAnswer": "b",
+      "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
@@ -44,14 +44,14 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which among this is a clustering algorithm?",
+      "question": "WEKA is",
       "answers": {
-        "a": "SVM",
-        "b": "Naive Bayec",
-        "c": "k-means ",
-        "d": "NN"
+        "a": "Waikato Explorer for Knowledge Analysis",
+        "b": "Western Environment for Knowledge Analysis",
+        "c": "Waikato Explorer for Knowledge Atlas",
+        "d": "Waikato Environment for Knowledge Analysis"
       },
-      "correctAnswer": "c",
+      "correctAnswer": "d",
       "difficulty": "beginner"
     }
   ]
