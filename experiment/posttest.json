@@ -4,11 +4,11 @@
     {
       "question": "What is the file format used in WEKA?",
       "answers": {
-        "a": "txt",
-        "b": "xlsx",
-        "c": "arff",
-        "d": "fasta"
-      }
+        "a": ".txt",
+        "b": ".xlsx",
+        "c": ".arff",
+        "d": ".fasta"
+      },
       "correctAnswer": "c",
       "difficulty": "beginner"
     },
